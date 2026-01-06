@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Seed Packet App</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial,sans-serif;background:#e0f2f1;display:flex;justify-content:center;padding:10px;}
+.app-container{width:100%;max-width:450px;background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
+header{background:#00796b;color:white;padding:20px;text-align:center;}
+header h1{font-size:1.2rem;}
+header select, header button{margin-top:10px;padding:8px;width:80%;border-radius:8px;border:none;}
+section{padding:15px;}
+h2{color:#00796b;margin-bottom:10px;}
+p{margin-bottom:10px;line-height:1.4;}
+.seed-list{columns:2;list-style:disc;padding-left:20px;margin-bottom:10px;}
+.color-box{height:50px;border-radius:10px;margin:8px 0;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:0.9rem;}
+.blue{background:linear-gradient(to right,#2196f3,#9c27b0);}
+.pink{background:#e91e63;}
+.orange{background:linear-gradient(to right,#ff9800,#f44336);}
+.meter{height:30px;background:#ddd;border-radius:20px;overflow:hidden;margin-bottom:10px;}
+.meter span{height:100%;display:block;background:#4caf50;text-align:center;color:white;font-weight:bold;transition:width 0.5s;}
+button{background:#00796b;color:white;border:none;padding:10px 15px;margin:5px;border-radius:10px;cursor:pointer;font-weight:bold;}
+button:hover{background:#004d40;}
+.card{background:#f1f8e9;padding:15px;margin:10px 0;border-radius:15px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+.sensor-data{display:flex;justify-content:space-between;align-items:center;margin:5px 0;font-weight:bold;font-size:0.95rem;}
+.sensor-value{font-size:1.1rem;}
+#scanMessage{margin-top:10px;font-weight:bold;color:#00796b;white-space:pre-line;}
+</style>
+</head>
+<body>
+<div class="app-container">
+
+<header>
+<h1 id="title">Smart Seed Packet</h1>
+<select onchange="changeLang(this.value)">
+<option value="en">English</option>
+<option value="ml">മലയാളം</option>
+<option value="hi">हिंदी</option>
+</select>
+</header>
+
+<section class="card">
+<h2 id="aboutTitle">About the Project</h2>
+<p id="aboutText">
+This smart seed packet uses anthocyanin-based polymer film to detect moisture
+and show colour changes indicating seed quality and germination rate.
+</p>
+</section>
+
+<section class="card">
+<h2 id="colorTitle">Moisture Colour Chart</h2>
+<div class="color-box blue">Blue → Purple : Too Dry (Low Germination)</div>
+<div class="color-box pink">Pink : Ideal Moisture (High Germination)</div>
+<div class="color-box orange">Orange → Red : Too Wet (Fungus Risk)</div>
+</section>
+
+<section class="card">
+<h2 id="meterTitle">Germination Rate Meter</h2>
+<div class="meter"><span id="meterBar">80%</span></div>
+<div class="sensor-data">
+<span>Moisture:</span> <span id="moistureVal" class="sensor-value">80%</span>
+</div>
+<!-- Manual control buttons -->
+<button onclick="setRate(30)">Dry</button>
+<button onclick="setRate(80)">Ideal</button>
+<button onclick="setRate(40)">Wet</button>
+</section>
+
+<section class="card">
+<h2 id="scanTitle">Scan Seed (Manual)</h2>
+<p>Click below to scan seed:</p>
+<button onclick="manualScan()">🔍 Scan</button>
+<p id="scanMessage"></p>
+</section>
+
+<section class="card">
+<h2 id="seedTitle">Seeds Included</h2>
+<h3 id="indiaTitle">India (15 Seeds)</h3>
+<ul class="seed-list">
+<li>Rice</li><li>Wheat</li><li>Maize</li><li>Millet</li><li>Mustard</li>
+<li>Groundnut</li><li>Chilli</li><li>Tomato</li><li>Brinjal</li><li>Onion</li>
+<li>Sunflower</li><li>Cotton</li><li>Pigeon Pea</li><li>Green Gram</li><li>Black Gram</li>
+</ul>
+
+<h3 id="keralaTitle">Kerala (10 Seeds)</h3>
+<ul class="seed-list">
+<li>Paddy</li><li>Coconut</li><li>Pepper</li><li>Cardamom</li><li>Ginger</li>
+<li>Turmeric</li><li>Tapioca</li><li>Banana</li><li>Arecanut</li><li>Nutmeg</li>
+</ul>
+</section>
+
+<section class="card">
+<h2 id="techTitle">Technology Used</h2>
+<p id="techText">
+Anthocyanin-based polymer film changes colour according to moisture level.
+It is eco-friendly, biodegradable and safe for agriculture.
+</p>
+</section>
+
+<footer class="card">
+© Smart Seed Packet Project
+</footer>
+</div>
+
+<script>
+let currentLang="en";
+
+const text={
+en:{
+title:"Smart Seed Packet",
+aboutTitle:"About the Project",
+aboutText:"This smart seed packet uses anthocyanin-based polymer film to detect moisture and show colour changes indicating seed quality and germination rate.",
+colorTitle:"Moisture Colour Chart",
+meterTitle:"Germination Rate Meter",
+scanTitle:"Scan Seed (Manual)",
+seedTitle:"Seeds Included",
+indiaTitle:"India (15 Seeds)",
+keralaTitle:"Kerala (10 Seeds)",
+techTitle:"Technology Used",
+techText:"Anthocyanin-based polymer film changes colour according to moisture level. It is eco-friendly and biodegradable."
+},
+ml:{
+title:"ഈർപ്പം കണ്ടെത്തുന്ന വിത്ത് പാക്കറ്റ്",
+aboutTitle:"പദ്ധതിയെ കുറിച്ച്",
+aboutText:"ആന്തോസയാനിൻ അധിഷ്ഠിത പോളിമർ ഫിലിം ഉപയോഗിച്ച് വിത്തിന്റെ ഈർപ്പം കണ്ടെത്തുകയും മുളപ്പിക്കൽ നിരക്ക് കാണുകയും ചെയ്യുന്നു.",
+colorTitle:"ഈർപ്പം നിറ ചാർട്ട്",
+meterTitle:"മുളപ്പിക്കൽ നിരക്ക് മീറ്റർ",
+scanTitle:"വിത്യം സ്കാൻ ചെയ്യുക (മാനുവൽ)",
+seedTitle:"ഉൾപ്പെടുത്തിയ വിത്തുകൾ",
+indiaTitle:"ഇന്ത്യ (15 വിത്തുകൾ)",
+keralaTitle:"കേരളം (10 വിത്തുകൾ)",
+techTitle:"ഉപയോഗിച്ച സാങ്കേതികവിദ്യ",
+techText:"ആന്തോസയാനിൻ ഫിലിം ഈർപ്പിന് അനുസരിച്ച് നിറം മാറുന്നു. ഇത് പരിസ്ഥിതി സൗഹൃദമാണ്."
+},
+hi:{
+title:"नमी पहचानने वाला बीज पैकेट",
+aboutTitle:"परियोजना के बारे में",
+aboutText:"यह स्मार्ट बीज पैकेट एंथोसायनिन आधारित पॉलिमर फिल्म का उपयोग करके नमी और अंकुरण दर दिखाता है।",
+colorTitle:"नमी रंग चार्ट",
+meterTitle:"अंकुरण दर मीटर",
+scanTitle:"बीज स्कैन करें (मैनुअल)",
+seedTitle:"बीज सूची",
+indiaTitle:"भारत (15 बीज)",
+keralaTitle:"केरल (10 बीज)",
+techTitle:"प्रयुक्त तकनीक",
+techText:"एंथोसायनिन आधारित फिल्म नमी के अनुसार रंग बदलती है और पर्यावरण के अनुकूल है।"
+}
+};
+
+function changeLang(lang){
+currentLang=lang;
+for(let id in text[lang]){
+if(document.getElementById(id)) document.getElementById(id).innerText=text[lang][id];
+}
+}
+
+// --- Manual germination meter ---
+function setRate(val){
+document.getElementById("meterBar").style.width=val+"%";
+document.getElementById("meterBar").innerText=val+"%";
+document.getElementById("moistureVal").innerText=val+"%";
+
+// Change meter color and voice
+let meter=document.getElementById("meterBar");
+let voiceText="";
+
+if(val<40){
+meter.style.background="linear-gradient(to right,#2196f3,#9c27b0)"; // Blue-Purple
+voiceText="Too dry, low germination rate";
+}else if(val>=40 && val<=70){
+meter.style.background="#e91e63"; // Pink
+voiceText="Ideal moisture, high germination rate";
+}else{
+meter.style.background="linear-gradient(to right,#ff9800,#f44336)"; // Orange-Red
+voiceText="Too wet, low germination rate";
+}
+
+// Speak the germination status
+let msg=new SpeechSynthesisUtterance(voiceText);
+msg.lang=currentLang==="ml"?"ml-IN":currentLang==="hi"?"hi-IN":"en-IN";
+speechSynthesis.speak(msg);
+}
+
+// --- Manual scan ---
+function manualScan(){
+document.getElementById("scanMessage").innerText = "Seed detected: Maize\nClick the buttons below to set moisture manually.";
+}
+</script>
+</body>
+</html>
